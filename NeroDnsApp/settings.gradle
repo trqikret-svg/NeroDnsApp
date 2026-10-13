@@ -1,0 +1,2 @@
+﻿rootProject.name = "NeroDnsApp"
+include ':app'

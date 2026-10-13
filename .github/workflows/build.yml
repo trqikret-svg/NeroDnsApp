@@ -19,21 +19,17 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v3
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3
 
     - name: Build APK with Gradle
       run: |
-        # ساخت گریدل رپر با نسخه پایدار
         gradle wrapper --gradle-version 8.4
         chmod +x gradlew
-        
-        # بیلد پروژه و قبول خودکار لایسنس‌های اندروید
-        yes | ./gradlew assembleDebug --stacktrace --no-daemon
+        ./gradlew assembleDebug --stacktrace --no-daemon
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
-      if: always()
       with:
         name: NeroDNS-APK
-        path: "**/build/outputs/apk/debug/*.apk"
+        path: app/build/outputs/apk/debug/app-debug.apk

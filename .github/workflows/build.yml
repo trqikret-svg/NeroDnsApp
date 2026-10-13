@@ -22,9 +22,13 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3
 
-    - name: Build APK with Gradle
+    - name: Remove BOM and Build APK
       working-directory: NeroDnsApp
       run: |
+        # حذف کاراکترهای نامرئی BOM از تمامی فایل‌های پروژه
+        find . -type f \( -name "*.gradle" -o -name "*.java" -o -name "*.xml" -o -name "*.properties" \) -exec sed -i '1s/^\xEF\xBB\xBF//' {} +
+        
+        # ساخت Wrapper و اجرای بیلد
         gradle wrapper --gradle-version 8.4
         chmod +x gradlew
         ./gradlew assembleDebug --stacktrace --no-daemon

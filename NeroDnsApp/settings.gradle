@@ -1,2 +1,2 @@
-﻿rootProject.name = "NeroDnsApp"
+rootProject.name = "NeroDnsApp"
 include ':app'

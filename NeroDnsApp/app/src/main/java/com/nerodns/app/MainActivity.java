@@ -1,8 +1,11 @@
-﻿package com.nerodns.app;
+package com.nerodns.app;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.VpnService;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText etLicense;
     private Button btnConnect;
     private TextView tvStatus;
+    private View indicatorDot;
     private boolean isConnected = false;
     private final OkHttpClient client = new OkHttpClient();
 
@@ -24,22 +28,31 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         etLicense = findViewById(R.id.etLicense);
         btnConnect = findViewById(R.id.btnConnect);
         tvStatus = findViewById(R.id.tvStatus);
+        indicatorDot = findViewById(R.id.indicatorDot);
 
         btnConnect.setOnClickListener(v -> {
-            if (isConnected) { disconnectVpn(); } else { verifyAndConnect(); }
+            if (isConnected) {
+                disconnectVpn();
+            } else {
+                verifyAndConnect();
+            }
         });
     }
 
     private void verifyAndConnect() {
         String license = etLicense.getText().toString().trim().toUpperCase();
         if (license.isEmpty()) {
-            Toast.makeText(this, "لطفاً کد لایسنس را وارد کنید", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "PLEASE ENTER LICENSE KEY", Toast.LENGTH_SHORT).show();
             return;
         }
-        tvStatus.setText("در حال بررسی لایسنس...");
+
+        tvStatus.setText("STATUS: AUTHENTICATING...");
+        indicatorDot.setBackgroundColor(Color.parseColor("#FFD166"));
+
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         JSONObject json = new JSONObject();
         try { json.put("token", license); } catch (Exception ignored) {}
@@ -54,10 +67,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call call, IOException e) {
                 runOnUiThread(() -> {
-                    tvStatus.setText("خطا در اتصال به سرور");
-                    Toast.makeText(MainActivity.this, "ارتباط با سرور برقرار نشد", Toast.LENGTH_SHORT).show();
+                    tvStatus.setText("STATUS: CONNECTION FAILED");
+                    indicatorDot.setBackgroundColor(Color.parseColor("#FF3366"));
+                    Toast.makeText(MainActivity.this, "Authentication server unreachable", Toast.LENGTH_SHORT).show();
                 });
             }
+
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String resStr = response.body().string();
@@ -67,10 +82,12 @@ public class MainActivity extends AppCompatActivity {
                         if (res.optBoolean("success")) {
                             startVpnPermission();
                         } else {
-                            tvStatus.setText("خطا: " + res.optString("message", "لایسنس نامعتبر"));
+                            tvStatus.setText("STATUS: " + res.optString("message", "INVALID TOKEN").toUpperCase());
+                            indicatorDot.setBackgroundColor(Color.parseColor("#FF3366"));
                         }
                     } catch (Exception e) {
-                        tvStatus.setText("خطا در پاسخ سرور");
+                        tvStatus.setText("STATUS: PARSE ERROR");
+                        indicatorDot.setBackgroundColor(Color.parseColor("#FF3366"));
                     }
                 });
             }
@@ -93,9 +110,10 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, DnsVpnService.class);
             startService(intent);
             isConnected = true;
-            btnConnect.setText("قطع اتصال");
-            btnConnect.setBackgroundColor(0xFFFF1744);
-            tvStatus.setText("وضعیت: متصل به Nero DNS");
+            btnConnect.setText("DISCONNECT");
+            btnConnect.setBackgroundColor(Color.parseColor("#FF0055"));
+            tvStatus.setText("STATUS: ACTIVE & PROTECTED");
+            indicatorDot.setBackgroundColor(Color.parseColor("#00F5D4"));
         }
     }
 
@@ -104,8 +122,9 @@ public class MainActivity extends AppCompatActivity {
         intent.setAction("STOP");
         startService(intent);
         isConnected = false;
-        btnConnect.setText("اتصال");
-        btnConnect.setBackgroundColor(0xFF00E676);
-        tvStatus.setText("وضعیت: قطع");
+        btnConnect.setText("CONNECT NETWORK");
+        btnConnect.setBackgroundResource(R.drawable.btn_neon);
+        tvStatus.setText("STATUS: DISCONNECTED");
+        indicatorDot.setBackgroundColor(Color.parseColor("#FF3366"));
     }
 }

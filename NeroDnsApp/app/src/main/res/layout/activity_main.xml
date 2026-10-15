@@ -1,47 +1,144 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp"
-    android:gravity="center"
-    android:background="#121212">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Nero DNS"
-        android:textColor="#FFFFFF"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="32dp"/>
-    <com.google.android.material.textfield.TextInputLayout
+    android:background="#08070D">
+
+    <!-- افکت هاله نئونی پس‌زمینه بالا (Glow Blur Effect) -->
+    <View
+        android:layout_width="260dp"
+        android:layout_height="260dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-80dp"
+        android:background="#337209B7" />
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColorHint="#AAAAAA"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etLicense"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="کد لایسنس (مثال: DNS-XXXXXX)"
-            android:textColor="#FFFFFF"
-            android:textAllCaps="true"/>
-    </com.google.android.material.textfield.TextInputLayout>
-    <Button
-        android:id="@+id/btnConnect"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginTop="24dp"
-        android:text="اتصال"
-        android:textSize="18sp"
-        android:backgroundTint="#00E676"
-        android:textColor="#000000"/>
-    <TextView
-        android:id="@+id/tvStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="وضعیت: قطع"
-        android:textColor="#888888"
-        android:layout_marginTop="20dp"
-        android:textSize="14sp"/>
-</LinearLayout>
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:padding="24dp">
+
+            <!-- هدر و برندینگ -->
+            <ImageView
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_marginTop="32dp"
+                android:src="@drawable/ic_launcher"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NERO DNS"
+                android:textColor="#FFFFFF"
+                android:textSize="28sp"
+                android:fontFamily="sans-serif-black"
+                android:letterSpacing="0.15"
+                android:layout_marginTop="12dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ULTRA-LOW LATENCY GAMING NETWORK"
+                android:textColor="#00F5D4"
+                android:textSize="10sp"
+                android:letterSpacing="0.2"
+                android:fontFamily="sans-serif-medium"
+                android:layout_marginBottom="36dp"/>
+
+            <!-- کارت Liquid Glass اصلی -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/glass_card"
+                android:padding="24dp"
+                android:elevation="12dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="VIP ACCESS TOKEN"
+                    android:textColor="#B3FFFFFF"
+                    android:textSize="11sp"
+                    android:letterSpacing="0.1"
+                    android:layout_marginBottom="8dp"/>
+
+                <!-- اینپوت کد لایسنس مدرن -->
+                <EditText
+                    android:id="@+id/etLicense"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="#26000000"
+                    android:hint="DNS-XXXXXX"
+                    android:textColorHint="#44FFFFFF"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:fontFamily="monospace"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:paddingHorizontal="16dp"/>
+
+                <!-- دکمه اتصال نئونی لیکیود -->
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnConnect"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="20dp"
+                    android:text="CONNECT NETWORK"
+                    android:textSize="15sp"
+                    android:fontFamily="sans-serif-black"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/btn_neon"/>
+
+            </LinearLayout>
+
+            <!-- کارت شیشه‌ای وضعیت اتصال (Status Hub) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/glass_card"
+                android:layout_marginTop="20dp"
+                android:padding="16dp"
+                android:gravity="center">
+
+                <View
+                    android:id="@+id/indicatorDot"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:background="#FF3366"
+                    android:layout_marginEnd="12dp"/>
+
+                <TextView
+                    android:id="@+id/tvStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="STATUS: DISCONNECTED"
+                    android:textColor="#DDFFFFFF"
+                    android:textSize="12sp"
+                    android:letterSpacing="0.1"
+                    android:fontFamily="sans-serif-bold"/>
+            </LinearLayout>
+
+            <!-- اطلاعات سرور اختصاصی -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PRIMARY NODE: 82.22.175.205"
+                android:textColor="#55FFFFFF"
+                android:textSize="11sp"
+                android:fontFamily="monospace"
+                android:layout_marginTop="24dp"/>
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
